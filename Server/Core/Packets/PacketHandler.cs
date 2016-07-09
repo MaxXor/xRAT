@@ -124,6 +124,10 @@ namespace xServer.Core.Packets
             {
                 CommandHandler.HandleGetConnectionsResponse(client, (ClientPackets.GetConnectionsResponse)packet);
             }
+            else if (type == typeof(ServerPackets.DoChatMessage))
+            {
+                CommandHandler.HandleDoChatMessage(client, (ServerPackets.DoChatMessage)packet);
+            }
         }
     }
 }

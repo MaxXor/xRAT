@@ -845,6 +845,20 @@ namespace xServer.Forms
             }
         }
 
+        private void remoteChatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Client c in GetSelectedClients())
+            {
+                if (c.Value.FrmChat != null)
+                {
+                    c.Value.FrmChat.Focus();
+                    return;
+                }
+                FrmRemoteChat FrmChat = new FrmRemoteChat(c);
+                FrmChat.Show();
+            }
+        }
+
         #endregion
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)

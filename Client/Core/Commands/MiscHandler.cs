@@ -160,5 +160,37 @@ namespace xClient.Core.Commands
 
             new Packets.ClientPackets.SetStatus("Showed Messagebox").Execute(client);
         }
+
+        public static void HandleDoChatStart(Client client, Packets.ServerPackets.DoChatStart packet)
+        {
+           var frmChat = new xClient.Forms.FrmRemoteChat(client);
+            new Thread(() => {
+                Application.Run(frmChat);
+            }).Start();
+        }
+
+        public static void HandleDoChatMessage(Client client, Packets.ServerPackets.DoChatMessage packet)
+        {
+            var frmChat = (xClient.Forms.FrmRemoteChat)Application.OpenForms["FrmRemoteChat"];
+            if(frmChat != null)
+                frmChat.AddMessage("Him", packet.Message);
+        }
+
+        public static void HandleDoChatStop(Client client, Packets.ServerPackets.DoChatStop packet)
+        {
+            var frmChat = (xClient.Forms.FrmRemoteChat)Application.OpenForms["FrmRemoteChat"];
+            if (frmChat != null)
+                CloseChatForm();
+        }
+
+        public static void CloseChatForm()
+        {
+            var frmChat = (xClient.Forms.FrmRemoteChat)Application.OpenForms["FrmRemoteChat"];
+            if(frmChat != null)
+            {
+                frmChat.Active = false;
+                frmChat.Close();
+            }
+        }
     }
 }

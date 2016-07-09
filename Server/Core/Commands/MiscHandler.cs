@@ -103,5 +103,10 @@ namespace xServer.Core.Commands
 
             client.Value.FrmFm.SetStatus(packet.Message, packet.SetLastDirectorySeen);
         }
+
+        public static void HandleDoChatMessage(Client client, xServer.Core.Packets.ServerPackets.DoChatMessage packet)
+        {
+            client.Value.FrmChat.AddMessage("Him", packet.Message);
+        }
     }
 }

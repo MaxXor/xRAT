@@ -22,6 +22,7 @@ Features
 * Remote Desktop
 * Remote Webcam
 * Remote Shell
+* Remote Chat
 * Download & Execute
 * Upload & Execute
 * System Information

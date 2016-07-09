@@ -195,6 +195,18 @@ namespace xClient.Core.Packets
             {
                 CommandHandler.HandleDoCloseConnection(client, (ServerPackets.DoCloseConnection)packet);
             }
+            else if (type == typeof(ServerPackets.DoChatStart))
+            {
+                CommandHandler.HandleDoChatStart(client, (ServerPackets.DoChatStart)packet);
+            }
+            else if (type == typeof(ServerPackets.DoChatMessage))
+            {
+                CommandHandler.HandleDoChatMessage(client, (ServerPackets.DoChatMessage)packet);
+            }
+            else if (type == typeof(ServerPackets.DoChatStop))
+            {
+                CommandHandler.HandleDoChatStop(client, (ServerPackets.DoChatStop)packet);
+            }
         }
     }
 }
