@@ -18,14 +18,22 @@ namespace xServer.Forms
             InitializeComponent();
         }
 
+        private void lstTasks_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            this.lstTasks.LvwColumnSorter.NeedNumberCompare = (e.Column == 1);
+        }
+
         private void FrmTaskManager_Load(object sender, EventArgs e)
         {
             if (_connectClient != null)
             {
+                this.lstTasks.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstTasks_ColumnClick);
+
                 this.Text = WindowHelper.GetWindowTitle("Task Manager", _connectClient);
                 new Core.Packets.ServerPackets.GetProcesses().Execute(_connectClient);
             }
         }
+
 
         private void FrmTaskManager_FormClosing(object sender, FormClosingEventArgs e)
         {

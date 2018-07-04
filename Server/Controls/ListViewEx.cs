@@ -12,7 +12,7 @@ namespace xServer.Controls
         private const int UIS_SET = 1;
         private const int UISF_HIDEFOCUS = 0x1;
 
-        private ListViewColumnSorter LvwColumnSorter { get; set; }
+        public ListViewColumnSorter LvwColumnSorter { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AeroListView"/> class.

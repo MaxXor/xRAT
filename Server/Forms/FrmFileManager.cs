@@ -64,10 +64,18 @@ namespace xServer.Forms
                 SetCurrentDir(GetAbsolutePath(@"..\"));
         }
 
+
+        private void lstDirectory_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            this.lstDirectory.LvwColumnSorter.NeedNumberCompare = (e.Column == 1);
+        }
+
         private void FrmFileManager_Load(object sender, EventArgs e)
         {
             if (_connectClient != null)
             {
+                this.lstDirectory.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstDirectory_ColumnClick);
+
                 this.Text = WindowHelper.GetWindowTitle("File Manager", _connectClient);
                 new Core.Packets.ServerPackets.GetDrives().Execute(_connectClient);
             }
@@ -92,9 +100,9 @@ namespace xServer.Forms
         {
             if (_connectClient != null && _connectClient.Value != null && lstDirectory.SelectedItems.Count > 0)
             {
-                PathType type = (PathType) lstDirectory.SelectedItems[0].Tag;
+                FileManagerListTag tag = (FileManagerListTag)lstDirectory.SelectedItems[0].Tag;
 
-                switch (type)
+                switch (tag.type)
                 {
                     case PathType.Back:
                         NavigateUp();
@@ -112,9 +120,9 @@ namespace xServer.Forms
         {
             foreach (ListViewItem files in lstDirectory.SelectedItems)
             {
-                PathType type = (PathType)files.Tag;
+                FileManagerListTag tag = (FileManagerListTag)files.Tag;
 
-                if (type == PathType.File)
+                if (tag.type == PathType.File)
                 {
                     string path = GetAbsolutePath(files.SubItems[0].Text);
 
@@ -227,9 +235,9 @@ namespace xServer.Forms
         {
             foreach (ListViewItem files in lstDirectory.SelectedItems)
             {
-                PathType type = (PathType) files.Tag;
+                FileManagerListTag tag = (FileManagerListTag)files.Tag;
 
-                if (type == PathType.File)
+                if (tag.type == PathType.File)
                 {
                     string path = GetAbsolutePath(files.SubItems[0].Text);
 
@@ -243,9 +251,9 @@ namespace xServer.Forms
         {
             foreach (ListViewItem files in lstDirectory.SelectedItems)
             {
-                PathType type = (PathType)files.Tag;
+                FileManagerListTag tag = (FileManagerListTag)files.Tag;
 
-                switch (type)
+                switch (tag.type)
                 {
                     case PathType.Directory:
                     case PathType.File:
@@ -257,7 +265,7 @@ namespace xServer.Forms
                             newName = GetAbsolutePath(newName);
 
                             if (_connectClient != null)
-                                new Core.Packets.ServerPackets.DoPathRename(path, newName, type).Execute(_connectClient);
+                                new Core.Packets.ServerPackets.DoPathRename(path, newName, tag.type).Execute(_connectClient);
                         }
                         break;
                 }
@@ -273,15 +281,15 @@ namespace xServer.Forms
             {
                 foreach (ListViewItem files in lstDirectory.SelectedItems)
                 {
-                    PathType type = (PathType)files.Tag;
+                    FileManagerListTag tag = (FileManagerListTag)files.Tag;
 
-                    switch (type)
+                    switch (tag.type)
                     {
                         case PathType.Directory:
                         case PathType.File:
                             string path = GetAbsolutePath(files.SubItems[0].Text);
                             if (_connectClient != null)
-                                new Core.Packets.ServerPackets.DoPathDelete(path, type).Execute(_connectClient);
+                                new Core.Packets.ServerPackets.DoPathDelete(path, tag.type).Execute(_connectClient);
                             break;
                     }
                 }
@@ -292,9 +300,9 @@ namespace xServer.Forms
         {
             foreach (ListViewItem files in lstDirectory.SelectedItems)
             {
-                PathType type = (PathType)files.Tag;
+                FileManagerListTag tag = (FileManagerListTag)files.Tag;
 
-                if (type == PathType.File)
+                if (tag.type == PathType.File)
                 {
                     string path = GetAbsolutePath(files.SubItems[0].Text);
 
@@ -324,9 +332,9 @@ namespace xServer.Forms
                 if (lstDirectory.SelectedItems.Count == 1)
                 {
                     var item = lstDirectory.SelectedItems[0];
-                    PathType type = (PathType)item.Tag;
+                    FileManagerListTag tag = (FileManagerListTag)item.Tag;
 
-                    if (type == PathType.Directory)
+                    if (tag.type == PathType.Directory)
                     {
                         path = GetAbsolutePath(item.SubItems[0].Text);
                     }
@@ -350,7 +358,7 @@ namespace xServer.Forms
         {
             if (!Directory.Exists(_connectClient.Value.DownloadDirectory))
                 Directory.CreateDirectory(_connectClient.Value.DownloadDirectory);
-            
+
             Process.Start(_connectClient.Value.DownloadDirectory);
         }
 
@@ -506,7 +514,7 @@ namespace xServer.Forms
         {
             try
             {
-                cmbDrives.Invoke((MethodInvoker) delegate
+                cmbDrives.Invoke((MethodInvoker)delegate
                 {
                     cmbDrives.DisplayMember = "DisplayName";
                     cmbDrives.ValueMember = "RootDirectory";
@@ -532,13 +540,15 @@ namespace xServer.Forms
             }
         }
 
-        public void AddItemToFileBrowser(string name, string size, PathType type, int imageIndex)
+        public void AddItemToFileBrowser(string name, long size, PathType type, int imageIndex)
         {
             try
-            {
-                ListViewItem lvi = new ListViewItem(new string[] { name, size, (type != PathType.Back) ? type.ToString() : string.Empty })
+            {              
+                ListViewItem lvi = new ListViewItem(new string[] { name,  
+                    (type == PathType.File) ? FileHelper.GetDataSize(size) : string.Empty,
+                    (type != PathType.Back) ? type.ToString() : string.Empty })
                 {
-                    Tag = type,
+                    Tag = new FileManagerListTag(type, size),
                     ImageIndex = imageIndex
                 };
 
@@ -557,7 +567,7 @@ namespace xServer.Forms
             try
             {
                 ListViewItem lvi =
-                    new ListViewItem(new string[] {id.ToString(), type, status, filename});
+                    new ListViewItem(new string[] { id.ToString(), type, status, filename });
 
                 lstDirectory.Invoke((MethodInvoker)delegate
                 {
@@ -597,7 +607,7 @@ namespace xServer.Forms
         {
             try
             {
-                lstTransfers.Invoke((MethodInvoker) delegate
+                lstTransfers.Invoke((MethodInvoker)delegate
                 {
                     lstTransfers.Items[index].SubItems[TRANSFER_STATUS].Text = status;
                     if (imageIndex >= 0)

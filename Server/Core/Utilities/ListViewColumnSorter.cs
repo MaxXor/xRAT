@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Windows.Forms;
+using xServer.Core.Data;
 
 namespace xServer.Core.Utilities
 {
@@ -20,6 +21,8 @@ namespace xServer.Core.Utilities
         /// </summary>
         private readonly CaseInsensitiveComparer _objectCompare;
 
+        private bool _needNumberCompare;
+
         /// <summary>
         /// Class constructor.  Initializes various elements
         /// </summary>
@@ -33,6 +36,9 @@ namespace xServer.Core.Utilities
 
             // Initialize the CaseInsensitiveComparer object
             _objectCompare = new CaseInsensitiveComparer();
+
+            _needNumberCompare = false;
+
         }
 
         /// <summary>
@@ -44,15 +50,46 @@ namespace xServer.Core.Utilities
         public int Compare(object x, object y)
         {
             // Cast the objects to be compared to ListViewItem objects
-            var listviewX = (ListViewItem) x;
-            var listviewY = (ListViewItem) y;
+            var listviewX = (ListViewItem)x;
+            var listviewY = (ListViewItem)y;
 
             if (listviewX.SubItems[0].Text == ".." || listviewY.SubItems[0].Text == "..")
                 return 0;
 
             // Compare the two items
-            var compareResult = _objectCompare.Compare(listviewX.SubItems[_columnToSort].Text,
-                listviewY.SubItems[_columnToSort].Text);
+            int compareResult = 0;
+
+            if (_needNumberCompare)
+            {
+                long a, b;
+
+                if (listviewX.Tag is FileManagerListTag)
+                {
+                    // fileSize to be compared
+                    a = (listviewX.Tag as FileManagerListTag).fileSize;
+                    b = (listviewY.Tag as FileManagerListTag).fileSize;
+                    compareResult = a >= b ? (a == b ? 0 : 1) : -1;
+
+                }
+                else
+                {
+                    if (long.TryParse(listviewX.SubItems[_columnToSort].Text, out a)
+                        && long.TryParse(listviewY.SubItems[_columnToSort].Text, out b))
+                    {
+                        compareResult = a >= b ? (a == b ? 0 : 1) : -1;
+                    }
+                    else
+                    {
+                        compareResult = _objectCompare.Compare(listviewX.SubItems[_columnToSort].Text,
+                     listviewY.SubItems[_columnToSort].Text);
+                    }
+                }
+            }
+            else
+            {
+                compareResult = _objectCompare.Compare(listviewX.SubItems[_columnToSort].Text,
+                    listviewY.SubItems[_columnToSort].Text);
+            }
 
             // Calculate correct return value based on object comparison
             if (_orderOfSort == SortOrder.Ascending)
@@ -89,5 +126,13 @@ namespace xServer.Core.Utilities
             set { _orderOfSort = value; }
             get { return _orderOfSort; }
         }
+
+        public bool NeedNumberCompare
+        {
+            set { _needNumberCompare = value; }
+            get { return _needNumberCompare; }
+        }
+
+
     }
 }

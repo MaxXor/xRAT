@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using xServer.Core.Helper;
 using xServer.Core.Networking;
+using xServer.Core.Utilities;
 
 namespace xServer.Forms
 {
@@ -19,10 +20,17 @@ namespace xServer.Forms
             InitializeComponent();
         }
 
+        private void lstConnections_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            this.lstConnections.LvwColumnSorter.NeedNumberCompare = (e.Column == 2 || e.Column == 4);
+        }
+
         private void FrmConnections_Load(object sender, EventArgs e)
         {
             if (_connectClient != null)
             {
+                this.lstConnections.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstConnections_ColumnClick);
+
                 this.Text = WindowHelper.GetWindowTitle("Connections", _connectClient);
                 new Core.Packets.ServerPackets.GetConnections().Execute(_connectClient);
             }

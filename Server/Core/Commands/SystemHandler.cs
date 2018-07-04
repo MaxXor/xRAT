@@ -46,7 +46,7 @@ namespace xServer.Core.Commands
                 client.Value.ProcessingDirectory = true;
 
                 client.Value.FrmFm.ClearFileBrowser();
-                client.Value.FrmFm.AddItemToFileBrowser("..", "", PathType.Back, 0);
+                client.Value.FrmFm.AddItemToFileBrowser("..", 0, PathType.Back, 0);
 
                 if (packet.Folders != null && packet.Folders.Length != 0 && client.Value.ProcessingDirectory)
                 {
@@ -57,7 +57,7 @@ namespace xServer.Core.Commands
                             if (client.Value == null || client.Value.FrmFm == null || !client.Value.ProcessingDirectory)
                                 break;
 
-                            client.Value.FrmFm.AddItemToFileBrowser(packet.Folders[i], "", PathType.Directory, 1);
+                            client.Value.FrmFm.AddItemToFileBrowser(packet.Folders[i], 0, PathType.Directory, 1);
                         }
                     }
                 }
@@ -72,7 +72,7 @@ namespace xServer.Core.Commands
                                 break;
 
                             client.Value.FrmFm.AddItemToFileBrowser(packet.Files[i],
-                                FileHelper.GetDataSize(packet.FilesSize[i]), PathType.File,
+                                packet.FilesSize[i], PathType.File,
                                 FileHelper.GetFileIcon(Path.GetExtension(packet.Files[i])));
                         }
                     }

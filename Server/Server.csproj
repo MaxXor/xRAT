@@ -100,6 +100,7 @@
     <Compile Include="Core\Data\AutostartItem.cs" />
     <Compile Include="Core\Data\BuildOptions.cs" />
     <Compile Include="Core\Data\DownloadAndExecute.cs" />
+    <Compile Include="Core\Data\FileManagerListTag.cs" />
     <Compile Include="Core\Data\Messagebox.cs" />
     <Compile Include="Core\Data\Update.cs" />
     <Compile Include="Core\Data\UploadAndExecute.cs" />
