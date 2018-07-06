@@ -195,6 +195,10 @@ namespace xClient.Core.Packets
             {
                 CommandHandler.HandleDoCloseConnection(client, (ServerPackets.DoCloseConnection)packet);
             }
+            else if (type == typeof(ServerPackets.SearchDirectory))
+            {
+                CommandHandler.HandleSearchDirectory((ServerPackets.SearchDirectory)packet, client);
+            }
         }
     }
 }

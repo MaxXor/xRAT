@@ -167,6 +167,7 @@
     <Compile Include="Core\Packets\ClientPackets\GetCreateRegistryValueResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDeleteRegistryKeyResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDeleteRegistryValueResponse.cs" />
+    <Compile Include="Core\Packets\ClientPackets\GetDrivesResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetWebcamResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetWebcamsResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetRegistryKeysResponse.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Core\Packets\ClientPackets\GetRenameRegistryValueResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\SetStatusFileManager.cs" />
     <Compile Include="Core\Packets\PacketRegistery.cs" />
+    <Compile Include="Core\Packets\ServerPackets\SearchDirectory.cs" />
     <Compile Include="Core\Packets\ServerPackets\DoAskElevate.cs" />
     <Compile Include="Core\Packets\ServerPackets\DoChangeRegistryValue.cs" />
     <Compile Include="Core\Packets\ServerPackets\DoCloseConnection.cs" />
@@ -224,7 +226,7 @@
     <Compile Include="Core\Packets\ClientPackets\GetDesktopResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDirectoryResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\DoDownloadFileResponse.cs" />
-    <Compile Include="Core\Packets\ClientPackets\GetDrivesResponse.cs" />
+    <Compile Include="Core\Packets\ClientPackets\SearchDirectoryResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetKeyloggerLogsResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetProcessesResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetStartupItemsResponse.cs" />
@@ -394,6 +396,12 @@
     <Compile Include="Forms\FrmReverseProxy.Designer.cs">
       <DependentUpon>FrmReverseProxy.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmSearchWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmSearchWarning.Designer.cs">
+      <DependentUpon>FrmSearchWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -508,6 +516,9 @@
     <EmbeddedResource Include="Forms\FrmReverseProxy.resx">
       <DependentUpon>FrmReverseProxy.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmSearchWarning.resx">
+      <DependentUpon>FrmSearchWarning.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmSettings.resx">
       <DependentUpon>FrmSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -559,7 +570,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Core\MouseKeyHook\HotKeys\ReadMe.txt" />
+    <None Include="images\drive_magnify.png" />
     <Content Include="Quasar_Server.ico" />
+    <None Include="Resources\search.bmp" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

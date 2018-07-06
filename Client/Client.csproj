@@ -136,12 +136,14 @@
     <Compile Include="Core\Packets\ClientPackets\GetCreateRegistryValueResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDeleteRegistryKeyResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDeleteRegistryValueResponse.cs" />
+    <Compile Include="Core\Packets\ClientPackets\GetDirectoryResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetWebcamResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetWebcamsResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetPasswordsResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetRegistryKeysResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetRenameRegistryKeyResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetRenameRegistryValueResponse.cs" />
+    <Compile Include="Core\Packets\ClientPackets\SearchDirectoryResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\SetStatusFileManager.cs" />
     <Compile Include="Core\Packets\PacketRegistery.cs" />
     <Compile Include="Core\Packets\ServerPackets\DoWebcamStop.cs" />
@@ -216,7 +218,7 @@
     <Compile Include="Core\MouseKeyHook\WinApi\Point.cs" />
     <Compile Include="Core\MouseKeyHook\WinApi\ThreadNativeMethods.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDesktopResponse.cs" />
-    <Compile Include="Core\Packets\ClientPackets\GetDirectoryResponse.cs" />
+    <Compile Include="Core\Packets\ServerPackets\SearchDirectory.cs" />
     <Compile Include="Core\Packets\ClientPackets\DoDownloadFileResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetDrivesResponse.cs" />
     <Compile Include="Core\Packets\ClientPackets\GetKeyloggerLogsResponse.cs" />

