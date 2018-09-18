@@ -255,6 +255,13 @@ namespace xServer.Forms
                     lock (_lockClients)
                     {
                         lstClients.Items.Add(lvi);
+
+                        /// Grouping new connected clients 
+
+                        if (IsClientsGrouped)
+                        {
+                            GroupListView(lstClients, _SubItemIndex);
+                        }
                     }
                 });
 
@@ -912,5 +919,92 @@ namespace xServer.Forms
         }
 
         #endregion
+
+
+        #region "GroupClients"
+
+        /* 
+           I think this is the original source for this code so it is nice to give a credit :D
+           https://www.daniweb.com/programming/software-development/code/370423/automatic-listview-grouping
+        */
+
+        public int _SubItemIndex; //store the index to use it to auto group new connected clients 
+        public bool IsClientsGrouped = false;
+
+        private void GroupListView(ListView lstV, int SubItemIndex)
+        {
+
+            bool flag = true;
+            lstV.BeginUpdate();
+
+            foreach (ListViewItem l in lstV.Items)
+            {
+                string strmyGroupname = l.SubItems[SubItemIndex].Text;
+
+                foreach (ListViewGroup lvg in lstV.Groups)
+                {
+                    if (lvg.Name == strmyGroupname) //checking if the group already exist
+                    {
+                        l.Group = lvg;
+                        flag = false;
+                    }
+                }
+
+                if (flag == true)
+                {
+                    ListViewGroup lstGrp = new ListViewGroup(strmyGroupname, strmyGroupname);
+                    lstV.Groups.Add(lstGrp);
+                    l.Group = lstGrp;
+                }
+
+                flag = true;
+                lstV.EndUpdate();
+                IsClientsGrouped = true;
+
+            }
+        }
+
+        private void unGroupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem l in lstClients.Items)
+            {
+                l.Group = null;
+            }
+            lstClients.Groups.Clear();
+            IsClientsGrouped = false;
+        }
+
+        private void tagToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _SubItemIndex = 1;
+            GroupListView(lstClients, 1);
+        }
+
+        private void countryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _SubItemIndex = 6;
+            GroupListView(lstClients, 6);
+        }
+
+        private void operatingSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _SubItemIndex = 7;
+            GroupListView(lstClients, 7);
+        }
+
+        private void accountTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _SubItemIndex = 8;
+            GroupListView(lstClients, 8);
+        }
+
+        private void userStatusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _SubItemIndex = 5;
+            GroupListView(lstClients, 5);
+        }
     }
+
+    #endregion
+
 }
