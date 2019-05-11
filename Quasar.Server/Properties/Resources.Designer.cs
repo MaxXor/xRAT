@@ -19,7 +19,7 @@ namespace Quasar.Server.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -167,6 +167,58 @@ namespace Quasar.Server.Properties {
             get {
                 object obj = ResourceManager.GetObject("cancel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap code {
+            get {
+                object obj = ResourceManager.GetObject("code", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Linq;
+        ///using System.Text;
+        ///using System.Threading.Tasks;
+        ///
+        ///namespace QuasarCode  {
+        ///    class Program {
+        ///        static void Main(string[] args) {
+        ///            // Write your code!
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        internal static string CodeExecutor_CSharp {
+            get {
+                return ResourceManager.GetString("CodeExecutor_CSharp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imports System
+        ///Imports System.Collections.Generic
+        ///Imports System.Linq
+        ///Imports System.Text
+        ///Imports System.Threading.Tasks
+        ///
+        ///Module QuasarCode
+        ///
+        ///    Sub Main()
+        ///        &apos; Write your code!
+        ///    End Sub
+        ///
+        ///End Module.
+        /// </summary>
+        internal static string CodeExecutor_VB {
+            get {
+                return ResourceManager.GetString("CodeExecutor_VB", resourceCulture);
             }
         }
         
