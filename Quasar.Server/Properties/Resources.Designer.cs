@@ -173,6 +173,60 @@ namespace Quasar.Server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap code {
+            get {
+                object obj = ResourceManager.GetObject("code", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Linq;
+        ///using System.Text;
+        ///using System.Threading.Tasks;
+        ///using System.Windows.Forms;
+        /// 
+        ///namespace QuasarCode {
+        ///    class Program {
+        ///        static void Main(string[] args) {
+        ///            MessageBox.Show("Write your code!");
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        internal static string CodeExecutor_CSharp {
+            get {
+                return ResourceManager.GetString("CodeExecutor_CSharp", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Imports System
+        ///Imports System.Collections.Generic
+        ///Imports System.Linq
+        ///Imports System.Text
+        ///Imports System.Threading.Tasks
+        ///Imports System.Windows.Forms
+        ///
+        ///Module QuasarCode
+        ///
+        ///    Sub Main()
+        ///        MessageBox.Show("Write your code!")
+        ///    End Sub
+        ///
+        ///End Module.
+        /// </summary>
+        internal static string CodeExecutor_VB {
+            get {
+                return ResourceManager.GetString("CodeExecutor_VB", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cog {
             get {
                 object obj = ResourceManager.GetObject("cog", resourceCulture);

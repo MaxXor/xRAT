@@ -13,7 +13,7 @@ namespace Quasar.Server.Forms
 {
     public partial class FrmRemoteExecution : Form
     {
-        private class RemoteExecutionMessageHandler
+        public class RemoteExecutionMessageHandler
         {
             public FileManagerHandler FileHandler;
             public TaskManagerHandler TaskHandler;
@@ -24,7 +24,7 @@ namespace Quasar.Server.Forms
         /// </summary>
         private readonly Client[] _clients;
 
-        private readonly List<RemoteExecutionMessageHandler> _remoteExecutionMessageHandlers;
+        public List<RemoteExecutionMessageHandler> _remoteExecutionMessageHandlers;
 
         private enum TransferColumn
         {
@@ -34,29 +34,64 @@ namespace Quasar.Server.Forms
 
         private bool _isUpdate;
 
-        public FrmRemoteExecution(Client[] clients)
+        public void ConfigureRemoteHandlers(Client[] clients)
         {
-            _clients = clients;
             _remoteExecutionMessageHandlers = new List<RemoteExecutionMessageHandler>(clients.Length);
-
-            InitializeComponent();
 
             foreach (var client in clients)
             {
                 var remoteExecutionMessageHandler = new RemoteExecutionMessageHandler
                 {
-                    FileHandler = new FileManagerHandler(client), TaskHandler = new TaskManagerHandler(client)
+                    FileHandler = new FileManagerHandler(client),
+                    TaskHandler = new TaskManagerHandler(client)
                 };
 
                 var lvi = new ListViewItem(new[]
                 {
-                    $"{client.Value.Username}@{client.Value.PcName} [{client.EndPoint.Address}:{client.EndPoint.Port}]",
-                    "Waiting..."
-                }) {Tag = remoteExecutionMessageHandler};
+                $"{client.Value.Username}@{client.Value.PcName} [{client.EndPoint.Address}:{client.EndPoint.Port}]",
+                "Waiting..."
+                })
+                { Tag = remoteExecutionMessageHandler };
 
                 lstTransfers.Items.Add(lvi);
+
                 _remoteExecutionMessageHandlers.Add(remoteExecutionMessageHandler);
                 RegisterMessageHandler(remoteExecutionMessageHandler);
+            }
+        }
+
+        public void ClearRemoteHandlers()
+        {
+
+            foreach (var handler in _remoteExecutionMessageHandlers)
+            {
+                UnregisterMessageHandler(handler);
+                handler.FileHandler.Dispose();
+            }
+
+            _remoteExecutionMessageHandlers.Clear();
+            lstTransfers.Items.Clear();
+        }
+
+        public FrmRemoteExecution(Client[] clients, int option = 0)
+        {
+            _clients = clients;
+
+            InitializeComponent();
+
+            ConfigureRemoteHandlers(clients);
+
+            switch (option)
+            {
+                case 0:
+                    radioURL.Checked = true;
+                    break;
+                case 1:
+                    radioLocalFile.Checked = true;
+                    break;
+                default:
+                    radioURL.Checked = true;
+                    break;
             }
         }
 
@@ -92,14 +127,7 @@ namespace Quasar.Server.Forms
 
         private void FrmRemoteExecution_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (var handler in _remoteExecutionMessageHandlers)
-            {
-                UnregisterMessageHandler(handler);
-                handler.FileHandler.Dispose();
-            }
-
-            _remoteExecutionMessageHandlers.Clear();
-            lstTransfers.Items.Clear();
+            ClearRemoteHandlers();
         }
 
         private void btnExecute_Click(object sender, EventArgs e)
@@ -155,7 +183,7 @@ namespace Quasar.Server.Forms
         /// </summary>
         /// <param name="sender">The message processor which raised the event.</param>
         /// <param name="transfer">The updated file transfer.</param>
-        private void FileTransferUpdated(object sender, FileTransfer transfer)
+        public void FileTransferUpdated(object sender, FileTransfer transfer)
         {
             for (var i = 0; i < lstTransfers.Items.Count; i++)
             {
@@ -180,7 +208,7 @@ namespace Quasar.Server.Forms
         /// </summary>
         /// <param name="sender">The message handler which raised the event.</param>
         /// <param name="message">The new status.</param>
-        private void SetStatusMessage(object sender, string message)
+        public void SetStatusMessage(object sender, string message)
         {
             for (var i = 0; i < lstTransfers.Items.Count; i++)
             {
@@ -194,7 +222,7 @@ namespace Quasar.Server.Forms
             }
         }
 
-        private void ProcessActionPerformed(object sender, ProcessAction action, bool result)
+        public void ProcessActionPerformed(object sender, ProcessAction action, bool result)
         {
             if (action != ProcessAction.Start) return;
 

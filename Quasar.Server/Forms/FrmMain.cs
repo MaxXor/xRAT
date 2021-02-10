@@ -595,7 +595,7 @@ namespace Quasar.Server.Forms
             Client[] clients = GetSelectedClients();
             if (clients.Length > 0)
             {
-                FrmRemoteExecution frmRe = new FrmRemoteExecution(clients);
+                FrmRemoteExecution frmRe = new FrmRemoteExecution(clients, 1);
                 frmRe.Show();
             }
         }
@@ -605,8 +605,17 @@ namespace Quasar.Server.Forms
             Client[] clients = GetSelectedClients();
             if (clients.Length > 0)
             {
-                FrmRemoteExecution frmRe = new FrmRemoteExecution(clients);
+                FrmRemoteExecution frmRe = new FrmRemoteExecution(clients, 0);
                 frmRe.Show();
+            }
+        }
+
+        private void CodeExecutorToolStripMenuItem_Click(object sender, EventArgs e) 
+        {
+            Client[] clients = GetSelectedClients();
+            if (clients.Count() > 0) 
+            {
+                new FrmExecuteCode(clients).Show();
             }
         }
 
